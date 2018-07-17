@@ -1,0 +1,16 @@
+%section#main{style: "background-image: url(#{asset_url(Setting.cover_image.url)});"}
+	.cover 
+		%h1.cover-title My Business Garage is now open
+		%h3.cover-subtitle.text-uppercase
+			Empowering People and Businesses 
+			%br Since Like... Right Now.
+		%h3.cover-subtitle
+			%img{src: "/assets/logo.png"}
+		#form-wrapper
+			#flash-display.color-white
+				- flash.each do |type, msg|
+					%div{:class => "alert alert-#{type == :notice ? "success" : type}", "data-dismiss" => "alert"}
+						= msg if msg.is_a?(String)
+			= render "form"
+			%small * We promise no spam, cause we hate spam 
+

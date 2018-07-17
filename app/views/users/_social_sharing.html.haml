@@ -1,0 +1,34 @@
+#social-sharing
+	%ul.contact-socials.clearfix
+		%li
+			%a.foo_social.ico-facebook{href: "javscript:;", target: "_blank", id: "share_button"}
+				%i.fa.fa-facebook-official 
+		%li
+			%a.foo_social.ico-twitter{href: "https://twitter.com/home?status=#{CGI::escape(Setting.sharing[:twitter_message]) + " " + @user.referral_url(root_url)}", target: "_blank"}
+				%i.fa.fa-twitter
+		%li
+			%a.foo_social.ico-mail{href: "mailto:?&subject=#{Setting.sharing[:email_subject]}&body=#{Setting.sharing[:email_message] + "%0A" + @user.referral_url(root_url)}", target: "_blank"}
+				%i.fa.fa-envelope
+
+#fb-root
+:javascript
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=996262377097239&version=v2.5";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+:javascript
+	$(document).on('click', '#share_button', function(e){
+		e.preventDefault();
+		FB.ui({
+			method: 'feed',
+			link: "#{@user.referral_url(root_url)}",
+			name: "#{Setting.sharing[:facebook_title]}",
+			picture: "#{Setting.facebook_image.present? ? root_url + Setting.facebook_image.url : ''}",
+			caption: '',
+			description: "#{Setting.sharing[:facebook_message]} #{@user.referral_url(root_url)}"
+		});
+	});
